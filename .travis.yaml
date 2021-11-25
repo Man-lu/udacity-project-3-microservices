@@ -1,0 +1,28 @@
+language:
+  - node_js
+
+node_js:
+  - 12
+
+services:
+  - docker
+
+install:
+  - echo "nothing to install"
+
+before-script:
+  - echo "no tests"
+
+script:
+  - docker-compose
+  - docker tag udagram-api-feed manlu23/udagram-api-feed
+  - docker tag udagram-api-user manlu23/udagram-api-user
+  - docker tag udagram-api-frontend manlu23/udagram-api-frontend
+  - docker tag udagram-api-reverseproxy manlu23/udagram-api-reverseproxy
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push manlu23/udagram-api-feed
+  - docker push manlu23/udagram-api-user
+  - docker push manlu23/udagram-api-frontend
+  - docker push manlu23/udagram-api-reverseproxy
